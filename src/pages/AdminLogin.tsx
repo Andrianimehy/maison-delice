@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, LockKeyhole, LogIn } from "lucide-react";
 import { supabase } from "../lib/supabase";
 

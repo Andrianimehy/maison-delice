@@ -4,7 +4,6 @@ import {
   Clock3,
   MapPin,
   Sparkles,
-  Phone,
   CupSoda,
   Leaf,
   Truck,

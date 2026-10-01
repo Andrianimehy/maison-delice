@@ -56,8 +56,8 @@ export default function Header() {
 
   return (
     <>
-    <header className={`sticky top-0 z-[1000] h-[100px] border-b border-stone-200 bg-white transition-all duration-300 ${scrolled ? "bg-white/90 opacity-90 shadow-md backdrop-blur-sm" : "opacity-100 shadow-none"}`}>
-      <div className="mx-auto flex h-full max-w-[1420px] items-center px-5 sm:px-8 lg:px-10">
+    <header className={`sticky top-0 left-0 right-0 z-[1000] h-[100px] w-full max-w-full border-b border-stone-200 bg-white transition-all duration-300 ${scrolled ? "bg-white/90 opacity-90 shadow-md backdrop-blur-sm" : "opacity-100 shadow-none"}`}>
+      <div className="mx-auto flex h-full min-w-0 max-w-[1420px] items-center px-2 sm:px-8 lg:px-10">
         {/* Logo */}
         <a
           href="#"
@@ -67,7 +67,7 @@ export default function Header() {
           <img
             src="/logo-header-reference.png"
             alt="Maison Délice"
-            className="h-[90px] w-[145px] object-contain sm:h-[94px] sm:w-[180px] object-contain"
+            className="h-[80px] w-[130px] max-w-full object-contain sm:h-[94px] sm:w-[180px]"
           />
         </a>
 
@@ -89,11 +89,11 @@ export default function Header() {
         </nav>
 
         {/* Search / cart / WhatsApp */}
-        <div className="ml-auto flex items-center gap-2 sm:ml-10 sm:gap-[25px]">
+        <div className="ml-auto flex min-w-0 shrink-0 items-center gap-0 sm:ml-10 sm:gap-[25px]">
           <button
             type="button"
             aria-label="Rechercher"
-            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center text-stone-900 transition hover:text-[#b96f08]"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center text-stone-900 transition hover:text-[#b96f08]"
           >
             <Search size={27} strokeWidth={1.8} />
           </button>
@@ -102,7 +102,7 @@ export default function Header() {
             type="button"
             aria-label="Panier"
             onClick={() => setCartOpen((value) => !value)}
-            className="relative flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center text-stone-900 transition hover:text-[#b96f08]"
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center text-stone-900 transition hover:text-[#b96f08]"
           >
             <ShoppingCart size={29} strokeWidth={1.7} />
             {cartCount > 0 && (
@@ -112,24 +112,15 @@ export default function Header() {
             )}
           </button>
 
-          <button
-            type="button"
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            onClick={() => setOpen(!open)}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full p-1 text-stone-900 md:hidden"
-          >
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
-
           <a
             href="https://wa.me/261341458773?text=Bonjour%20Maison%20Délice%2C%20je%20souhaite%20avoir%20des%20informations."
             target="_blank"
             rel="noreferrer"
             aria-label="Contacter Maison Délice sur WhatsApp"
             title="WhatsApp"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#bd7408] text-white shadow-sm transition hover:bg-[#a96406] sm:h-[72px] sm:w-auto sm:min-w-[248px] sm:justify-start sm:gap-3 sm:px-5 sm:pr-6"
+            className="flex h-10 w-10 min-w-0 shrink-0 items-center justify-center rounded-full bg-[#bd7408] p-0 text-white shadow-sm transition hover:bg-[#a96406] sm:h-[72px] sm:w-auto sm:min-w-[248px] sm:gap-3 sm:justify-start sm:px-5 sm:pr-6"
           >
-            <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border-2 border-white sm:h-[40px] sm:w-[40px]">
+            <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full border-2 border-white">
               <svg viewBox="0 0 24 24" className="h-[25px] w-[25px]" fill="none" aria-hidden="true">
                 <path
                   d="M20.5 3.5A10.4 10.4 0 0 0 13.1.5C7.4.1 2.3 4.6 1.4 10.2c-.4 2.4 0 4.8 1.1 6.9L1 23l6.1-1.6a10.6 10.6 0 0 0 5.1 1.3h.1c5.8 0 10.6-4.7 10.6-10.5 0-3.1-1.2-6.1-3.4-8.7Z"
@@ -146,7 +137,16 @@ export default function Header() {
               <span className="mt-[3px] block text-[14px] font-medium">+261 34 14 587 73</span>
             </span>
           </a>
-</div>
+
+          <button
+            type="button"
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            onClick={() => setOpen(!open)}
+            className="rounded-full p-2 text-stone-900 md:hidden"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {cartOpen && (
@@ -219,26 +219,25 @@ export default function Header() {
           )}
         </div>
       )}
-    </header>
 
       {open && (
-        <div className="fixed left-0 right-0 top-[100px] z-[1100] border-t border-stone-200 bg-white shadow-xl md:hidden">
-          <nav className="mx-4 rounded-b-2xl bg-white p-4 text-stone-900">
-            <div className="flex flex-col gap-1">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-stone-800 transition hover:bg-stone-100 hover:text-[#b96f08]"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
+        <div className="mx-4 rounded-2xl border border-stone-200 bg-white p-5 text-stone-900 shadow-2xl md:hidden">
+          <nav className="flex flex-col gap-1">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-4 py-3 text-sm font-medium text-stone-800 hover:bg-stone-100"
+              >
+                {link.label}
+              </a>
+            ))}
           </nav>
         </div>
       )}
+
+    </header>
 
       {checkoutOpen && (
         <Checkout

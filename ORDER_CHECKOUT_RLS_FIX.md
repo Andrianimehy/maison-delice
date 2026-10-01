@@ -1,0 +1,1 @@
+Exécuter une seule fois `supabase/create-order-rpc.sql` dans Supabase SQL Editor. Ne pas réactiver la policy publique SELECT de orders.

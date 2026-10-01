@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Clock3,
   MapPin,
   Sparkles,
-  CupSoda,
-  Leaf,
-  Truck,
-  Heart,
 } from "lucide-react";
 
 import Header from "../components/Header";
@@ -15,40 +11,6 @@ import Hero from "../components/Hero";
 import ProductCard from "../components/ProductCard";
 import SectionHeading from "../components/SectionHeading";
 import { getProducts, type Product } from "../services/productService";
-
-const FacebookIcon = ({ size = 20 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M14 8h3V4.5c-.5-.1-1.7-.2-3.1-.2-3.1 0-5.2 1.9-5.2 5.3V12H5.3v4h3.4v8h4.2v-8h3.5l.6-4h-4.1V10c0-1.2.3-2 1.1-2Z"/>
-  </svg>
-);
-
-const InstagramIcon = ({ size = 20 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-    <rect x="3" y="3" width="18" height="18" rx="5"/>
-    <circle cx="12" cy="12" r="4"/>
-    <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/>
-  </svg>
-);
-
-const WhatsAppIcon = ({ size = 22 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path
-      d="M20.5 3.5A10.4 10.4 0 0 0 13.1.5C7.4.1 2.3 4.6 1.4 10.2c-.4 2.4 0 4.8 1.1 6.9L1 23l6.1-1.6a10.6 10.6 0 0 0 5.1 1.3h.1c5.8 0 10.6-4.7 10.6-10.5 0-3.1-1.2-6.1-3.4-8.7Z"
-      fill="currentColor"
-    />
-    <path
-      d="M17.4 13.8c-.3-.2-1.7-.9-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-1.7-.8-2.8-1.5-3.9-3.4-.3-.5.3-.5.7-1.7.1-.2.1-.4 0-.6-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.3s.9 2.6 1 2.8c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.8 3 .7.5-.1 1.7-.7 1.9-1.4.3-.7.3-1.3.2-1.4-.2-.1-.4-.2-.7-.3Z"
-      fill="#fff"
-    />
-  </svg>
-);
-
-const linksForFooter = [
-  ["Accueil", "#"],
-  ["À propos", "#histoire"],
-  ["Nos Produits", "#creations"],
-  ["Contact", "#contact"],
-] as const;
 
 const testimonials = [
   {
@@ -72,6 +34,14 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const productsCarouselRef = useRef<HTMLDivElement>(null);
+
+  function scrollProducts(direction: "prev" | "next") {
+    productsCarouselRef.current?.scrollBy({
+      left: direction === "next" ? productsCarouselRef.current.clientWidth * 0.82 : -productsCarouselRef.current.clientWidth * 0.82,
+      behavior: "smooth",
+    });
+  }
 
   useEffect(() => {
     async function loadProducts() {
@@ -97,74 +67,23 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="overflow-x-clip bg-[#faf8f4]">
+    <main className="overflow-hidden bg-[#faf8f4]">
       <Header />
 
       {/* HERO */}
       <Hero />
 
-      {/* SERVICES */}
-      <section className="border-b border-stone-200 bg-[#faf8f1]">
-        <div className="mx-auto grid max-w-[1420px] grid-cols-1 divide-y divide-stone-200 sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4">
-          {[
-            [CupSoda, "Produits artisanaux", "Préparés avec passion"],
-            [Leaf, "Ingrédients de qualité", "Sélectionnés avec soin"],
-            [Truck, "Livraison rapide", "À Antananarivo et environs"],
-            [Heart, "Satisfaction garantie", "La qualité avant tout"],
-          ].map(([Icon, title, text]) => {
-            const ServiceIcon = Icon as typeof CupSoda;
-            return (
-              <div key={title as string} className="flex min-h-[122px] items-center gap-5 px-8 py-6 lg:px-12">
-                <span className="flex h-[74px] w-[74px] shrink-0 items-center justify-center rounded-full border-2 border-[#d4890d] text-[#d4890d]">
-                  <ServiceIcon size={34} strokeWidth={1.7} />
-                </span>
-                <div>
-                  <h3 className="text-[17px] font-semibold text-[#162033]">{title as string}</h3>
-                  <p className="mt-2 text-[14px] text-slate-500">{text as string}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
       {/* NOS CRÉATIONS */}
       <section
         id="creations"
-        className="bg-[#faf8f1] px-5 py-12 sm:px-8 lg:px-10 lg:py-14"
+        className="px-5 py-24 sm:px-8 lg:px-10 lg:py-32"
       >
         <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#b97918]">
-              Nos produits
-            </p>
-            <div className="mx-auto mt-4 flex items-center justify-center gap-3">
-              <span className="h-px w-12 bg-[#c98a25]" />
-              <span className="text-[#c98a25]">✦</span>
-              <span className="h-px w-12 bg-[#c98a25]" />
-            </div>
-            <h2 className="mt-3 font-serif text-4xl font-medium text-[#121a27] sm:text-5xl">
-              Nos Délicieuses Pâtisseries
-            </h2>
-            <p className="mt-2 text-base leading-7 text-slate-500">
-              Des créations gourmandes pour tous les moments
-            </p>
-          </div>
-
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
-            {["Tous", "Gâteaux", "Tartes", "Viennoiseries", "Biscuits", "Desserts"].map((label, index) => (
-              <span
-                key={label}
-                className={`rounded-full px-6 py-3 text-sm font-medium ${
-                  index === 0
-                    ? "bg-[#c78317] text-white shadow-sm"
-                    : "border border-stone-200 bg-white text-stone-600"
-                }`}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
+          <SectionHeading
+            eyebrow="Nos créations"
+            title="Des recettes simples, faites avec soin."
+            text="Du premier geste au dernier coup de four, chaque création est pensée pour retrouver le plaisir des choses bien faites."
+          />
 
           {/* Chargement */}
           {loading && (
@@ -203,14 +122,61 @@ export default function Home() {
 
           {/* Produits */}
           {!loading && !error && products.length > 0 && (
-            <div className="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
-              ))}
-            </div>
+            <>
+              {/* Mobile : carrousel horizontal tactile */}
+              <div className="relative mt-14 md:hidden">
+                <div
+                  ref={productsCarouselRef}
+                  className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                  aria-label="Carrousel de nos créations"
+                >
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      className="w-[82vw] max-w-[340px] shrink-0 snap-center"
+                    >
+                      <ProductCard product={product} />
+                    </div>
+                  ))}
+                </div>
+
+                {products.length > 1 && (
+                  <div className="mt-2 flex items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => scrollProducts("prev")}
+                      aria-label="Produit précédent"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-sm transition active:scale-95"
+                    >
+                      ‹
+                    </button>
+
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400">
+                      Faites glisser
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => scrollProducts("next")}
+                      aria-label="Produit suivant"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-sm transition active:scale-95"
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Tablette / desktop : grille conservée */}
+              <div className="mt-14 hidden gap-x-6 gap-y-14 sm:grid-cols-2 md:grid lg:grid-cols-4">
+                {products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                  />
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
@@ -225,7 +191,7 @@ export default function Home() {
             <SectionHeading
               eyebrow="Notre savoir-faire"
               title="Le goût du temps, le geste de l'artisan."
-              text="Chez Maison Délice, nous croyons que les meilleures choses demandent du temps. Nos pâtes reposent, nos viennoiseries sont façonnées avec précision et nos fournées sont préparées avec attention."
+              text="Chez DORÉA, nous croyons que les meilleures choses demandent du temps. Nos pâtes reposent, nos viennoiseries sont façonnées avec précision et nos fournées sont préparées avec attention."
               light
             />
 
@@ -240,7 +206,7 @@ export default function Home() {
 
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1200&q=88"
+              src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=85"
               alt="Sélection de pains artisanaux"
               className="aspect-[4/5] w-full rounded-[2rem] object-cover"
               loading="lazy"
@@ -265,7 +231,7 @@ export default function Home() {
       <section className="px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
-            eyebrow="Ils aiment Maison Délice"
+            eyebrow="Ils aiment DORÉA"
             title="Quelques mots de nos clients."
           />
 
@@ -361,7 +327,7 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-4xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#d7a267]">
-            Maison Délice
+            DORÉA
           </p>
 
           <h2 className="mt-5 text-4xl font-light leading-tight text-white sm:text-6xl">
@@ -378,100 +344,25 @@ export default function Home() {
           </p>
 
           <a
-            href="https://wa.me/261341458773?text=Bonjour%20Maison%20Délice%2C%20je%20souhaite%20passer%20une%20commande."
-            target="_blank"
-            rel="noreferrer"
-            className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#25D366] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#1ebe5d]"
+            href="mailto:bonjour@dorea.example"
+            className="mt-9 inline-flex items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-medium text-stone-900 transition hover:bg-[#f4eadb]"
           >
-            <WhatsAppIcon size={20} />
-            Nous contacter sur WhatsApp
+            Nous contacter
+            <ArrowRight size={17} />
           </a>
         </div>
       </section>
 
-      {/* WHATSAPP */}
-      <a
-        href="https://wa.me/261341458773?text=Bonjour%20Maison%20Délice%2C%20je%20souhaite%20avoir%20des%20informations."
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Discuter avec Maison Délice sur WhatsApp"
-        title="Discuter sur WhatsApp"
-        className="fixed bottom-6 right-5 z-[9998] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl ring-2 ring-white/80 transition hover:scale-105 hover:bg-[#1ebe5d] sm:bottom-8 sm:right-8"
-      >
-        <WhatsAppIcon size={28} />
-      </a>
-
       {/* FOOTER */}
-      <footer className="bg-[#271608] px-5 pb-6 pt-5 text-white sm:px-8 lg:px-10">
-        <div className="mx-auto grid max-w-[1320px] gap-8 md:grid-cols-[1.15fr_1.1fr_1fr_1.2fr]">
-          <div className="flex items-center">
-            <img
-              src="/logo-footer-reference.png"
-              alt="Maison Délice"
-              className="h-[112px] w-[180px] object-contain object-center"
-            />
-          </div>
+      <footer className="bg-stone-950 px-5 pb-8 text-white sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-7 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © 2026 DORÉA. Tous droits réservés.
+          </p>
 
-          <div className="border-l border-white/15 pl-8">
-            <h3 className="text-[16px] font-semibold text-[#e7b252]">
-              Liens rapides
-            </h3>
-            <div className="mt-3 grid grid-cols-2 gap-x-10 gap-y-2 text-[14px] text-white/90">
-              {linksForFooter.map(([label, href]) => (
-                <a key={label} href={href} className="transition hover:text-[#e7b252]">
-                  {label}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-l border-white/15 pl-8">
-            <h3 className="text-[16px] font-semibold text-[#e7b252]">
-              Nous suivre
-            </h3>
-            <div className="mt-4 flex gap-4">
-              <a
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1877f2] text-white transition hover:scale-105"
-              >
-                <FacebookIcon size={20} />
-              </a>
-              <a
-                href="https://www.instagram.com/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white transition hover:scale-105"
-              >
-                <InstagramIcon size={20} />
-              </a>
-            </div>
-          </div>
-
-          <div className="border-l border-white/15 pl-8">
-            <h3 className="text-[16px] font-semibold text-[#e7b252]">
-              Nous contacter
-            </h3>
-            <a
-              href="https://wa.me/261341458773"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 flex items-center gap-3 text-[14px] text-white/90 hover:text-[#e7b252]"
-            >
-              <WhatsAppIcon size={21} />
-              +261 34 14 587 73
-            </a>
-            <a
-              href="mailto:contact@maisondelice.mg"
-              className="mt-3 flex items-center gap-3 text-[14px] text-white/90 hover:text-[#e7b252]"
-            >
-              <span className="text-lg">✉</span>
-              contact@maisondelice.mg
-            </a>
-          </div>
+          <p>
+            Boulangerie · Pâtisserie · Café
+          </p>
         </div>
       </footer>
     </main>

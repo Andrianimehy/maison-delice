@@ -50,6 +50,7 @@ export default function Header() {
 
   function openCheckout() {
     if (cart.length === 0) return;
+    setCartOpen(false);
     setCheckoutOpen(true);
   }
 
@@ -236,6 +237,8 @@ export default function Header() {
         </div>
       )}
 
+    </header>
+
       {checkoutOpen && (
         <Checkout
           items={cart}
@@ -249,7 +252,7 @@ export default function Header() {
           }}
         />
       )}
-    </header>
+
       {showScrollTop && (
         <button
           type="button"

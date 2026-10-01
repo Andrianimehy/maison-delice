@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/consol_",
+      "destination": "/index.html"
+    }
+  ]
+}

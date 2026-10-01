@@ -61,7 +61,7 @@ export default function Checkout({
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
       <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-[2rem] bg-white shadow-2xl">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-100 bg-white px-6 py-5">
           <div>
